@@ -1,0 +1,76 @@
+1.
+db.restaurants.aggregate([
+    { $unwind: "$grades" },
+    {
+        $group: {
+            _id: "$cuisine",
+            highestScore: { $max: "$grades.score" }
+        }
+    }
+])
+
+2.
+db.restaurants.find().sort({ "grades.date": -1 }).limit(1)
+
+3.
+db.restaurants.aggregate([ { $match: { cuisine: "Turkish" } }, { $unwind: "$grades" }, { $group: { _id: "$restaurant_id", name: { $first: "$name" }, avgScore: { $avg: "$grades.score" } } }, { $sort: { avgScore: -1 } }, { $limit: 1 } ])
+
+4.
+db.restaurants.insertMany([
+    {
+        "address": {
+            "building": "100",
+            "coord": [77.594566, 12.971599],
+            "street": "MG Road",
+            "zipcode": "560001"
+        },
+        "borough": "Bangalore",
+        "cuisine": "Indian",
+        "grades": [
+            {"date": {"$date": 1609459200000}, "grade": "A", "score": 8},
+            {"date": {"$date": 1590960000000}, "grade": "B", "score": 14}
+        ],
+        "name": "Bangalore Bistro",
+        "restaurant_id": "60012345",
+        "population": 95000
+    },
+    {
+        "address": {
+            "building": "50",
+            "coord": [76.931381, 30.733314],
+            "street": "Sector 17",
+            "zipcode": "160017"
+        },
+        "borough": "Chandigarh",
+        "cuisine": "North Indian",
+        "grades": [
+            {"date": {"$date": 1609459200000}, "grade": "A", "score": 9},
+            {"date": {"$date": 1590960000000}, "grade": "B", "score": 16}
+        ],
+        "name": "Chandigarh Kitchen",
+        "restaurant_id": "60012346",
+        "population": 95000
+    },
+    {
+        "address": {
+            "building": "300",
+            "coord": [77.04148, 28.613939],
+            "street": "Connaught Place",
+            "zipcode": "110001"
+        },
+        "borough": "Delhi",
+        "cuisine": "Indian",
+        "grades": [
+            {"date": {"$date": 1609459200000}, "grade": "A", "score": 7},
+            {"date": {"$date": 1590960000000}, "grade": "A", "score": 12}
+        ],
+        "name": "Delhi Delights",
+        "restaurant_id": "60012347",
+        "population": 95000
+    }
+]);
+db.restaurants.updateOne(
+    { "borough": "Chandigarh" },
+    { $set: { "population": 20000000 } }
+);
+

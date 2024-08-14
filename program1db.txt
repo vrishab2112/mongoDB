@@ -1,0 +1,36 @@
+1.
+// Inserting a single document
+db.students.insert({
+    rollno: 1,
+    name: "John Doe",
+    city: "New York",
+    address: ["123 Main St", "456 Oak St"]
+});
+
+// Inserting multiple documents
+db.students.insertMany([
+    {
+        rollno: 2,
+        name: "Jane Smith",
+        city: "Los Angeles",
+        address: ["789 Pine St", "101 Maple St"]
+    },
+    {
+        rollno: 3,
+        name: "Alice Johnson",
+        city: "Chicago",
+        address: ["202 Elm St", "303 Cedar St"]
+    }
+]);
+
+2.
+db.students.renameCollection("student_details");
+
+3.
+db.student_details.find().pretty();
+
+4.
+db.student_details.find().skip(1).limit(1).pretty();
+
+5.
+db.student_details.find({}, { _id: 0 }).pretty();
